@@ -1,0 +1,381 @@
+meta:
+  repo: Ayoush/mandi-rows
+  stack: Python 3.12, pytest, ruff
+  unit_of_work: One market CSV file + expected flags JSON + test
+
+units_of_work:
+  - kind: market_file
+    path: spec/markets/
+    registry: registry/files.json
+    implemented: []
+    missing_examples:
+      - indore-wheat
+      - pune-onion
+      - delhi-potato
+      - mumbai-tomato
+      - chennai-rice
+
+tasks:
+  # ── BEGINNER TRACK ──────────────────────────────────────────
+
+  - id: docs-columns
+    title: "Column dictionary in docs/columns.md"
+    track: beginner
+    tier: docs
+    status: open
+    first_file: docs/columns.md
+    skill: technical writing
+    acceptance:
+      - commodity, market, modal price, and unit defined
+      - One sample row shown
+      - Null policy stated
+
+  - id: docs-dates
+    title: "Date format rules in docs/dates.md"
+    track: beginner
+    tier: docs
+    status: open
+    first_file: docs/dates.md
+    skill: technical writing
+    acceptance:
+      - DD/MM/YYYY and ISO 8601 both documented
+      - Rejected formats listed
+      - Timezone note (date only)
+
+  - id: docs-outliers
+    title: "Outlier policy in docs/outliers.md"
+    track: beginner
+    tier: docs
+    status: open
+    first_file: docs/outliers.md
+    skill: technical writing
+    acceptance:
+      - Flag vs error distinction explained
+      - No silent drop policy stated
+      - One example of a flag
+
+  - id: docs-readme-quickstart
+    title: "README quickstart with one pytest and one CLI command"
+    track: beginner
+    tier: docs
+    status: open
+    first_file: README.md
+    skill: technical writing
+    acceptance:
+      - One pytest command
+      - One CLI command
+      - Offline claim stated
+
+  - id: docs-contributing-size
+    title: "Contribution size guide in CONTRIBUTING.md"
+    track: beginner
+    tier: docs
+    status: open
+    first_file: CONTRIBUTING.md
+    skill: technical writing
+    acceptance:
+      - One market file per PR
+      - Max 50 rows stated
+      - Registry update explained
+
+  - id: test-missing-price
+    title: "Missing modal price flagged in tests/test_required.py"
+    track: beginner
+    tier: tests
+    status: open
+    first_file: tests/test_required.py
+    skill: Python testing, data validation
+    acceptance:
+      - Row is kept, not dropped
+      - Flag reason is MISSING_PRICE
+      - Other rows still pass
+
+  - id: test-modal-above-max
+    title: "Modal above max flagged in tests/test_range.py"
+    track: beginner
+    tier: tests
+    status: open
+    first_file: tests/test_range.py
+    skill: range validation testing
+    acceptance:
+      - Row is flagged not dropped
+      - Threshold comes from spec not magic number
+      - Message includes commodity name
+
+  - id: test-date-parse
+    title: "Date parse in tests/test_dates.py"
+    track: beginner
+    tier: tests
+    status: open
+    first_file: tests/test_dates.py
+    skill: date parsing testing
+    acceptance:
+      - 31/02 rejected
+      - 01/04/2024 accepted
+      - ISO 8601 accepted
+
+  - id: test-duplicate-market-day
+    title: "Duplicate market-day in tests/test_dupes.py"
+    track: beginner
+    tier: tests
+    status: open
+    first_file: tests/test_dupes.py
+    skill: deduplication testing
+    acceptance:
+      - Second row flagged
+      - First row kept
+      - Duplicate key named in flag
+
+  - id: test-unit-alias
+    title: "Unit alias 'Quintal' vs 'qtl' in tests/test_units.py"
+    track: beginner
+    tier: tests
+    status: open
+    first_file: tests/test_units.py
+    skill: alias testing
+    acceptance:
+      - Alias applied
+      - Unknown unit flagged
+      - Original value preserved
+
+  - id: feat-indore-wheat
+    title: "Add Indore wheat market file in spec/markets/indore-wheat.csv"
+    track: beginner
+    tier: tiny-feature
+    status: open
+    first_file: spec/markets/
+    skill: data contribution, CSV
+    acceptance:
+      - At least 5 rows
+      - Expected flags in fixtures/expected/
+      - Registry updated
+
+  - id: feat-mandi-check-cli
+    title: "CLI mandi check in src/mandi_rows/cli.py"
+    track: beginner
+    tier: tiny-feature
+    status: open
+    first_file: src/mandi_rows/cli.py
+    skill: CLI development, Python
+    acceptance:
+      - Exits 1 if any error-level flag
+      - Outputs JSON report
+      - No network required
+
+  - id: feat-month-rollup
+    title: "Month rollup in src/mandi_rows/rollup.py"
+    track: beginner
+    tier: tiny-feature
+    status: open
+    first_file: src/mandi_rows/rollup.py
+    skill: data aggregation, Python
+    acceptance:
+      - Mean of modal price
+      - Ignores flagged rows
+      - Returns rupees or paise as documented
+
+  - id: feat-commodity-alias
+    title: "Commodity alias 'Gwar' -> 'Guar' in spec/aliases/commodities.csv"
+    track: beginner
+    tier: tiny-feature
+    status: open
+    first_file: spec/aliases/commodities.csv
+    skill: alias tables, Python
+    acceptance:
+      - Alias applied before checks
+      - Unknown commodity kept unchanged
+      - Test covers both
+
+  - id: feat-arrival-quantity
+    title: "Arrival-quantity column in src/mandi_rows/schema.py"
+    track: beginner
+    tier: tiny-feature
+    status: open
+    first_file: src/mandi_rows/schema.py
+    skill: schema design, Python
+    acceptance:
+      - Column is optional
+      - Negative quantity rejected
+      - Missing is allowed
+
+  - id: bug-rupee-comma
+    title: "Fix rupee comma parsed as thousands separator in src/mandi_rows/money.py"
+    track: beginner
+    tier: small-bug
+    status: open
+    first_file: src/mandi_rows/money.py
+    skill: string parsing, Python
+    acceptance:
+      - '1,250' parses to 1250
+      - '1.250' is not guessed
+      - Fixture added
+
+  - id: bug-utf8-bom
+    title: "Fix UTF-8 BOM failing the loader in src/mandi_rows/load.py"
+    track: beginner
+    tier: small-bug
+    status: open
+    first_file: src/mandi_rows/load.py
+    skill: encoding, Python
+    acceptance:
+      - BOM stripped on load
+      - Content unchanged
+      - Test file has a BOM
+
+  - id: bug-empty-file-success
+    title: "Fix empty file reported as success in src/mandi_rows/check.py"
+    track: beginner
+    tier: small-bug
+    status: open
+    first_file: src/mandi_rows/check.py
+    skill: edge case handling
+    acceptance:
+      - Empty file raises EMPTY error
+      - CLI exits 1
+      - Docs updated
+
+  - id: bug-sort-changes-index
+    title: "Fix sort order changing row indices in src/mandi_rows/report.py"
+    track: beginner
+    tier: small-bug
+    status: open
+    first_file: src/mandi_rows/report.py
+    skill: data integrity
+    acceptance:
+      - Index is file order, not sort order
+      - Sort is display-only
+      - Test locks the index
+
+  - id: bug-alias-applied-twice
+    title: "Fix alias applied twice in src/mandi_rows/alias.py"
+    track: beginner
+    tier: small-bug
+    status: open
+    first_file: src/mandi_rows/alias.py
+    skill: idempotency
+    acceptance:
+      - Second pass is a no-op
+      - Test runs alias twice
+      - Result is same as one pass
+
+  # ── ADVANCED TRACK ───────────────────────────────────────────
+
+  - id: adv-10-market-files
+    title: "Add 10 market files across 5 states and 3 commodities"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: spec/markets/
+    skill: data contribution, Python
+    acceptance:
+      - 10 files, each max 50 rows
+      - All have expected flags
+      - Registry updated
+
+  - id: adv-price-trend
+    title: "Price trend detector: flag > 2x the 30-day average"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: src/mandi_rows/
+    skill: data analysis, statistics, Python
+    acceptance:
+      - Uses only rows in the same file
+      - Flag reason is PRICE_SPIKE
+      - Threshold configurable
+
+  - id: adv-multi-format
+    title: "Support multiple CSV column orderings (Agmarknet v1 and v2)"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: src/mandi_rows/schema.py
+    skill: schema detection, Python
+    acceptance:
+      - Auto-detect column order
+      - Both formats tested
+      - Format name in report
+
+  - id: adv-api-server
+    title: "Add a FastAPI endpoint for CSV checking"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: src/mandi_rows/
+    skill: FastAPI, HTTP API, Python
+    acceptance:
+      - POST /check accepts CSV body
+      - Returns flag report as JSON
+      - No network for tests
+
+  - id: adv-snapshot-tool
+    title: "Build a script to fetch and vendor a new Agmarknet snapshot"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: scripts/
+    skill: data engineering, Python, HTTP
+    acceptance:
+      - Downloads from public URL
+      - Crops to max 50 rows
+      - Updates registry
+
+  - id: adv-commodity-taxonomy
+    title: "Build a commodity taxonomy with parent-child relationships"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: spec/aliases/commodities.csv
+    skill: data modeling, Python
+    acceptance:
+      - Parent/child hierarchy
+      - Rollup by parent commodity
+      - Tests cover both levels
+
+  - id: adv-property-tests
+    title: "Property tests: check(x) output is stable across row orderings"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: tests/
+    skill: property-based testing, hypothesis
+    acceptance:
+      - Uses hypothesis
+      - Covers permutations of rows
+      - Stable flag set regardless of order
+
+  - id: adv-benchmarks
+    title: "Benchmark check() on a 10,000-row file"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: src/mandi_rows/check.py
+    skill: performance, Python profiling
+    acceptance:
+      - Benchmark in scripts/bench.py
+      - Results in docs/performance.md
+      - Runs in under 10 seconds
+
+  - id: adv-parquet-output
+    title: "Add --output-format parquet to the CLI"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: src/mandi_rows/cli.py
+    skill: data formats, Python, polars/pandas
+    acceptance:
+      - Valid parquet output
+      - Same flags as JSON output
+      - Test reads the parquet file
+
+  - id: adv-ci-registry-check
+    title: "CI check: every spec/markets/ file must be in registry"
+    track: advanced
+    tier: advanced
+    status: open
+    first_file: .github/workflows/ci.yml
+    skill: CI/CD, tooling
+    acceptance:
+      - Orphan file fails CI
+      - Error names the file
+      - Runs in under 5 seconds

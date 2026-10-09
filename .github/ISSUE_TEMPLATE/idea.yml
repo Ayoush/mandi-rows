@@ -1,0 +1,17 @@
+name: Idea
+description: A suggestion for new market files or features
+title: "[Idea] "
+labels: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Idea
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why this matters
+    validations:
+      required: true

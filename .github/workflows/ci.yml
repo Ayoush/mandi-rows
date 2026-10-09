@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'claude/**', 'feat/**', 'fix/**', 'docs/**', 'test/**']
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: Lint, typecheck, test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -e ".[dev]"
+
+      - name: Lint
+        run: ruff check .
+
+      - name: Typecheck
+        run: mypy src/
+
+      - name: Test
+        run: pytest -x -q
