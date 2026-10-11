@@ -1,4 +1,4 @@
-**# Column dictionary
+# Column dictionary
 
 Mandi price CSV files follow the Agmarknet export format. This document describes the columns supported by mandi-rows, including their data types, meanings and example values:
 
@@ -21,6 +21,8 @@ Mandi price CSV files follow the Agmarknet export format. This document describe
 | Column | Type | Description | Example |
 | `Grade` | string | Grade Quality of commodity | FAQ |
 | `Unit` | string | Unit of measurement | Quintal |
+| `Commodity_code` | string | Code Identifying the commodity | onion |
+| `Variety_Code` | string | Code identifying the commodity variety | 101 |
 | `Arrival_in_Qtl` | float | Quantity of commodity that arrived, measured in quintals | 125.5 |
 
 **Sample row:**
