@@ -67,7 +67,11 @@ python -m mandi_rows.cli check spec/markets/indore-wheat.csv
 # Output:
 # {"file": "indore-wheat.csv", "rows": 10, "flags": [{"row": 3, "reason": "MISSING_PRICE"}]}
 ```
+## Documentation
 
+- [Agmarknet CSV Columns](docs/columns.md) — Column names, data types, descriptions, and example values.
+- [Date Format Rules](docs/dates.md) — Supported date formats.
+- [Outlier Policy](docs/outliers.md) — How flags and errors are handled.
 ---
 
 ## Stack
