@@ -1,0 +1,6 @@
+{
+  "ok": true,
+  "flag_count": 1,
+  "error_count": 0,
+  "expected_flag_codes": ["MIN_GT_MAX"]
+}

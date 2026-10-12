@@ -1,0 +1,20 @@
+{
+  "schema": "1",
+  "source_files": [
+    {
+      "id": "sample-market",
+      "path": "spec/markets/sample.csv",
+      "rows": 3,
+      "status": "fixture",
+      "notes": "Synthetic data for tests"
+    }
+  ],
+  "missing": [
+    {
+      "id": "agmarknet-bulk",
+      "description": "Full historical dump from data.gov.in",
+      "url": "https://data.gov.in/catalog/current-daily-price-various-commodities-various-markets-mandi",
+      "status": "not-downloaded"
+    }
+  ]
+}

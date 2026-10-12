@@ -1,0 +1,4 @@
+State,District,Market,Commodity,Variety,Arrival_Date,Min_Price,Max_Price,Modal_Price
+Maharashtra,Pune,Pune,Onion,Onion,15/08/2024,1000,1500,1200
+Maharashtra,Mumbai,Vashi,Tomato,Local,16/08/2024,800,1200,1000
+Karnataka,Bengaluru,Yeshwanthpur,Tomato,Bangalore Tomato,2024-08-17,900,1400,1100
