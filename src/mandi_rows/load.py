@@ -60,6 +60,19 @@ def load_csv(path: Path) -> list[MandiRow]:
                 min_p = int(raw["Min_Price"])
                 max_p = int(raw["Max_Price"])
                 modal_p = int(raw["Modal_Price"])
+
+                for column, price, value in (
+                    ("min_price", min_p, raw["Min_Price"]),
+                    ("max_price", max_p, raw["Max_Price"]),
+                    ("modal_price", modal_p, raw["Modal_Price"]),
+                ):
+                    if price < 0:
+                        raise LoadError(
+                            i,
+                            column,
+                            value,
+                            "Price must be non-negative",
+                        )
             except ValueError as e:
                 raise LoadError(i, "price", "", str(e)) from e
 
