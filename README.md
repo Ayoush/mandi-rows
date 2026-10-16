@@ -73,6 +73,7 @@ python -m mandi_rows.cli check spec/markets/indore-wheat.csv
 - [Date Format Rules](docs/dates.md) — Supported date formats.
 - [Outlier Policy](docs/outliers.md) — How flags and errors are handled.
 - [Key Mandis by State](docs/markets.md) — Notable mandis per state and their commodity specialisations.
+- [Commodities and Data Source](docs/commodities.md) — Agmarknet dataset, CSV structure, and commodity categories.
 ---
 
 ## Stack

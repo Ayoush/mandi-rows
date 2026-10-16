@@ -1,7 +1,9 @@
 """Tests for CSV loader."""
-import pytest
 from pathlib import Path
-from mandi_rows.load import load_csv, LoadError
+
+import pytest
+
+from mandi_rows.load import LoadError, load_csv
 
 SAMPLE_CSV = """State,District,Market,Commodity,Variety,Arrival_Date,Min_Price,Max_Price,Modal_Price
 Maharashtra,Pune,Pune,Onion,Onion,15/08/2024,1000,1500,1200
@@ -41,3 +43,35 @@ def test_raises_on_non_integer_price(tmp_path: Path) -> None:
     p.write_text(csv_text)
     with pytest.raises(LoadError):
         load_csv(p)
+
+
+@pytest.mark.parametrize(
+    ("csv_column", "error_column", "negative_price"),
+    [
+        ("Min_Price", "min_price", "-1"),
+        ("Max_Price", "max_price", "-1500"),
+        ("Modal_Price", "modal_price", "-100"),
+    ],
+)
+def test_raises_on_negative_price(
+    tmp_path: Path,
+    csv_column: str,
+    error_column: str,
+    negative_price: str,
+) -> None:
+    lines = SAMPLE_CSV.strip().splitlines()
+    headers = lines[0].split(",")
+    values = lines[1].split(",")
+
+    values[headers.index(csv_column)] = negative_price
+    csv_text = lines[0] + "\n" + ",".join(values) + "\n"
+
+    p = tmp_path / "negative_price.csv"
+    p.write_text(csv_text)
+
+    with pytest.raises(LoadError) as exc_info:
+        load_csv(p)
+
+    assert exc_info.value.row_num == 2
+    assert exc_info.value.column == error_column
+    assert exc_info.value.value == negative_price

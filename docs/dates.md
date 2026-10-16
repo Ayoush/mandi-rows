@@ -15,6 +15,7 @@ All other formats are rejected.
 - `04/15/2024` (MM/DD/YYYY) — rejected
 - `15/04/24` (2-digit year) — rejected
 - `31/02/2024` (invalid calendar date) — rejected with reason `INVALID_DATE`
+- `2024/08/15` (not supported — must use - separator correctly)
 
 ## Timezone
 
