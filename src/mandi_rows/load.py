@@ -4,9 +4,9 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
+from .alias import normalise_unit
 from .dates import parse_date
 from .schema import REQUIRED_COLUMNS
-
 
 @dataclass(frozen=True)
 class MandiRow:
@@ -95,7 +95,11 @@ def load_csv(path: Path) -> list[MandiRow]:
                     max_price=max_p,
                     modal_price=modal_p,
                     grade=raw.get("Grade", "").strip() or None,
-                    unit=raw.get("Unit", "").strip() or None,
+                    unit=(
+                        normalise_unit(raw_unit)
+                        if(raw_unit:=raw.get("Unit","").strip())
+                        else None
+                          ),
                     arrivals_qtl=arrivals,
                 )
             )
