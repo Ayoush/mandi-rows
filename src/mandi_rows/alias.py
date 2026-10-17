@@ -55,6 +55,16 @@ COMMODITY_ALIASES: dict[str, str] = {
 }
 
 
+UNIT_ALIAS: dict[str, str] = {
+    "quintal": "Qtl",
+    "qtls": "Qtl",
+}
+
+
 def resolve_commodity(name: str) -> str:
     """Return the canonical commodity name, or input unchanged if not an alias."""
     return COMMODITY_ALIASES.get(name.strip().lower(), name)
+
+
+def normalise_unit(unit: str) -> str:
+    return UNIT_ALIAS.get(unit.strip().lower(), unit)
