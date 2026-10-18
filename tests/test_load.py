@@ -10,6 +10,24 @@ Maharashtra,Pune,Pune,Onion,Onion,15/08/2024,1000,1500,1200
 Maharashtra,Mumbai,Vashi,Tomato,Local,16/08/2024,800,1200,1000
 """
 
+SAMPLE_CSV_ALIAS = """State,District,Market,Commodity,Variety,Arrival_Date,Min_Price,Max_Price,Modal_Price
+Maharashtra,Pune,Pune,pyaz,Onion,15/08/2024,1000,1500,1200
+Maharashtra,Mumbai,Vashi,kanda,Local,16/08/2024,800,1200,1000
+"""
+
+
+def test_loads_valid_csv_alias(tmp_path: Path) -> None:
+    p = tmp_path / "mandi.csv"
+    p.write_text(SAMPLE_CSV_ALIAS)
+
+    rows = load_csv(p, resolve_aliases=True)
+    assert rows[0].commodity == "Onion"
+    assert rows[1].commodity == "Onion"
+
+    rows_default = load_csv(p)
+    assert rows_default[0].commodity == "pyaz"
+    assert rows_default[1].commodity == "kanda"
+
 
 def test_loads_valid_csv(tmp_path: Path) -> None:
     p = tmp_path / "mandi.csv"
