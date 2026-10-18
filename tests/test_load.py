@@ -93,3 +93,19 @@ def test_raises_on_negative_price(
     assert exc_info.value.row_num == 2
     assert exc_info.value.column == error_column
     assert exc_info.value.value == negative_price
+
+
+def test_normalises_unit_when_loading_csv(tmp_path: Path) -> None:
+    csv_text = (
+        "State,District,Market,Commodity,Variety,Arrival_Date,"
+        "Min_Price,Max_Price,Modal_Price,Unit\n"
+        "Maharashtra,Pune,Pune,Onion,Onion,15/08/2024,"
+        "1000,1500,1200,Quintal\n"
+    )
+
+    p = tmp_path / "unit.csv"
+    p.write_text(csv_text)
+
+    rows = load_csv(p)
+
+    assert rows[0].unit == "Qtl"
