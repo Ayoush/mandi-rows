@@ -91,3 +91,34 @@ def test_normalises_unit_when_loading_csv(tmp_path: Path) -> None:
     rows = load_csv(p)
 
     assert rows[0].unit == "Qtl"
+
+
+def test_load_csv_with_utf_bom(tmp_path: Path) -> None:
+    csv_text_with_bom = (
+        "\ufeffState,District,Market,Commodity,Variety,Arrival_Date,"
+        "Min_Price,Max_Price,Modal_Price\n"
+        "Maharashtra,Pune,Pune,Onion,Onion,15/08/2024,"
+        "1000,1500,1200\n"
+    )
+
+    csv_text_without_bom = (
+        "State,District,Market,Commodity,Variety,Arrival_Date,"
+        "Min_Price,Max_Price,Modal_Price\n"
+        "Maharashtra,Pune,Pune,Onion,Onion,15/08/2024,"
+        "1000,1500,1200\n"
+    )
+
+    temp_without_bom = tmp_path / "no_bom.csv"
+    temp_without_bom.write_text(csv_text_without_bom, encoding="utf-8-sig")
+    rows_without_bom = load_csv(temp_without_bom)
+
+    temp_with_bom = tmp_path / "with_bom.csv"
+    temp_with_bom.write_text(csv_text_with_bom, encoding="utf-8")
+    rows_with_bom = load_csv(temp_with_bom)
+
+    assert len(rows_without_bom) == 1
+    assert rows_without_bom[0].state == "Maharashtra"
+    assert len(rows_with_bom) == 1
+    assert rows_with_bom[0].state == "Maharashtra"
+    assert rows_with_bom[0].commodity == "Onion"
+    assert rows_with_bom[0].min_price == 1000
