@@ -27,6 +27,9 @@ mandi = "mandi_rows.cli:app"
 [tool.hatch.build.targets.wheel]
 packages = ["src/mandi_rows"]
 
+[tool.hatch.build.targets.wheel.force-include]
+"data/known_markets.json" = "mandi_rows/data/known_markets.json"
+
 [tool.ruff]
 line-length = 100
 target-version = "py312"
