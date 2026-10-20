@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
-from .alias import normalise_unit
+from .alias import resolve_commodity, normalise_unit
 from .dates import parse_date
 from .schema import REQUIRED_COLUMNS
 
@@ -33,7 +33,7 @@ class LoadError(Exception):
         super().__init__(f"Row {row_num} col '{column}': {reason} (got '{value}')")
 
 
-def load_csv(path: Path) -> list[MandiRow]:
+def load_csv(path: Path, resolve_aliases: bool = False) -> list[MandiRow]:
     """
     Load an Agmarknet CSV file and return a list of MandiRow objects.
     Raises LoadError on the first malformed row.
@@ -82,13 +82,16 @@ def load_csv(path: Path) -> list[MandiRow]:
                     arrivals = float(raw["Arrivals_in_Qtl"])
                 except ValueError as e:
                     raise LoadError(i, "Arrivals_in_Qtl", raw["Arrivals_in_Qtl"], str(e)) from e
+            commodity = raw["Commodity"].strip()
+            if resolve_aliases:
+                commodity = resolve_commodity(commodity)
 
             rows.append(
                 MandiRow(
                     state=raw["State"].strip(),
                     district=raw["District"].strip(),
                     market=raw["Market"].strip(),
-                    commodity=raw["Commodity"].strip(),
+                    commodity=commodity,
                     variety=raw["Variety"].strip(),
                     arrival_date=arrival_date,
                     min_price=min_p,
@@ -96,10 +99,10 @@ def load_csv(path: Path) -> list[MandiRow]:
                     modal_price=modal_p,
                     grade=raw.get("Grade", "").strip() or None,
                     unit=(
-                        normalise_unit(raw_unit)
-                        if(raw_unit:=raw.get("Unit","").strip())
-                        else None
-                          ),
+                      normalise_unit(raw_unit)
+                      if (raw_unit := raw.get("Unit", "").strip())
+                      else None
+                    ),
                     arrivals_qtl=arrivals,
                 )
             )
