@@ -70,7 +70,7 @@ python -m mandi_rows.cli check spec/markets/indore-wheat.csv
 ## Documentation
 
 - [Agmarknet CSV Columns](docs/columns.md) — Column names, data types, descriptions, and example values.
-- [Date Format Rules](docs/dates.md) — Supported date formats.
+- [Date Format Rules](docs/dates.md) — Supported date formats (DD/MM/YYYY vs ISO 8601), parsing mechanics, and edge cases.
 - [Outlier Policy](docs/outliers.md) — How flags and errors are handled.
 - [Commodities and Data Source](docs/commodities.md) — Agmarknet dataset, CSV structure, and commodity categories.
 ---
