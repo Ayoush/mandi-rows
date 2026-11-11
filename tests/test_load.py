@@ -95,6 +95,14 @@ def test_raises_on_negative_price(
     assert exc_info.value.value == negative_price
 
 
+def test_raises_load_error_on_non_utf8_file(tmp_path: Path) -> None:
+    row = "Maharashtra,Puñe,Pune,Onion,Onion,15/08/2024,1000,1500,1200\n"
+    p = tmp_path / "latin.csv"
+    p.write_bytes((SAMPLE_CSV.splitlines()[0] + "\n" + row).encode("latin-1"))
+    with pytest.raises(LoadError):
+        load_csv(p)
+
+
 def test_normalises_unit_when_loading_csv(tmp_path: Path) -> None:
     csv_text = (
         "State,District,Market,Commodity,Variety,Arrival_Date,"
